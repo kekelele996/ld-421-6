@@ -1,5 +1,6 @@
 import { borrowRecords, equipment, maintenanceRecords, reservations } from "../database/seeds/seed.ts";
-import { BorrowStatus } from "../types/enums.ts";
+import { BorrowStatus, MaintenanceTodoStatus } from "../types/enums.ts";
+import { maintenancePlanService } from "./maintenancePlan.service.ts";
 
 export const dashboardService = {
   summary() {
@@ -13,16 +14,22 @@ export const dashboardService = {
       count: borrowRecords.filter((record) => record.equipmentId === item.id).length
     })).sort((a, b) => b.count - a.count).slice(0, 10);
     const warrantyAlerts = equipment.filter((item) => new Date(item.warrantyExpiresAt).getTime() < Date.now() + 120 * 86400000);
+    const maintenanceDashboard = maintenancePlanService.dashboard();
     return {
       stats: {
         totalEquipment: equipment.length,
         pendingBorrow: borrowRecords.filter((record) => record.status === BorrowStatus.Pending).length,
         pendingReservation: reservations.filter((record) => record.status === "Pending").length,
-        maintenanceDue: maintenanceRecords.filter((record) => new Date(record.nextMaintenanceDate).getTime() < Date.now() + 30 * 86400000).length
+        maintenanceDue: maintenanceRecords.filter((record) => new Date(record.nextMaintenanceDate).getTime() < Date.now() + 30 * 86400000).length,
+        activePlans: maintenanceDashboard.stats.activePlans,
+        pendingTodos: maintenanceDashboard.stats.pendingTodos,
+        overdueTodos: maintenanceDashboard.stats.overdueTodos
       },
       byStatus,
       borrowTop,
-      warrantyAlerts
+      warrantyAlerts,
+      maintenanceUpcoming: maintenanceDashboard.upcoming,
+      maintenanceOverdue: maintenanceDashboard.overdue
     };
   }
 };

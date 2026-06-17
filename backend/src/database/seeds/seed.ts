@@ -1,5 +1,5 @@
-import { AssetStatus, BorrowStatus, MaintenanceType, ReturnCondition } from "../../types/enums.ts";
-import type { AuditLog, BorrowRecord, Equipment, EquipmentCategory, MaintenanceRecord, Reservation, User } from "../../types/interfaces.ts";
+import { AssetStatus, BorrowStatus, CycleUnit, MaintenancePlanStatus, MaintenanceTodoStatus, MaintenanceType, ReturnCondition } from "../../types/enums.ts";
+import type { AuditLog, BorrowRecord, Equipment, EquipmentCategory, MaintenancePlan, MaintenanceRecord, MaintenanceTodo, Reservation, User } from "../../types/interfaces.ts";
 
 export const users: User[] = [
   { id: "u-admin", name: "管理员 高", role: "Admin" },
@@ -74,6 +74,90 @@ export const borrowRecords: BorrowRecord[] = [
 export const maintenanceRecords: MaintenanceRecord[] = [
   { id: "mt-001", equipmentId: "eq-hplc-01", type: MaintenanceType.Calibration, content: "流量准确性校准，替换密封圈", maintenanceDate: "2026-05-22", nextMaintenanceDate: "2026-08-22", cost: 3600, maintainerId: "u-manager", result: "Pass" },
   { id: "mt-002", equipmentId: "eq-sterile-03", type: MaintenanceType.Corrective, content: "压力阀异常，等待供应商二次检测", maintenanceDate: "2026-06-09", nextMaintenanceDate: "2026-06-15", cost: 1200, maintainerId: "u-manager", result: "NeedsFollowUp" }
+];
+
+export const maintenancePlans: MaintenancePlan[] = [
+  {
+    id: "mp-001",
+    name: "分析仪器季度校准",
+    categoryId: "cat-analysis",
+    type: MaintenanceType.Calibration,
+    cycleValue: 3,
+    cycleUnit: CycleUnit.Month,
+    remindDaysBefore: 7,
+    content: "流量准确性校准、性能验证、记录检查",
+    status: MaintenancePlanStatus.Active,
+    createdBy: "u-admin",
+    createdAt: "2026-01-15T10:00:00+08:00",
+    updatedAt: "2026-01-15T10:00:00+08:00"
+  },
+  {
+    id: "mp-002",
+    name: "光学设备月度清洁",
+    categoryId: "cat-optics",
+    type: MaintenanceType.Cleaning,
+    cycleValue: 1,
+    cycleUnit: CycleUnit.Month,
+    remindDaysBefore: 3,
+    content: "镜头清洁、光路检查、防尘维护",
+    status: MaintenancePlanStatus.Active,
+    createdBy: "u-manager",
+    createdAt: "2026-02-20T14:30:00+08:00",
+    updatedAt: "2026-02-20T14:30:00+08:00"
+  },
+  {
+    id: "mp-003",
+    name: "安全设备年度检测",
+    categoryId: "cat-safety",
+    type: MaintenanceType.Preventive,
+    cycleValue: 1,
+    cycleUnit: CycleUnit.Year,
+    remindDaysBefore: 15,
+    content: "安全性能检测、压力测试、密封检查",
+    status: MaintenancePlanStatus.Active,
+    createdBy: "u-admin",
+    createdAt: "2026-03-01T09:00:00+08:00",
+    updatedAt: "2026-03-01T09:00:00+08:00"
+  }
+];
+
+export const maintenanceTodos: MaintenanceTodo[] = [
+  {
+    id: "td-001",
+    planId: "mp-001",
+    equipmentId: "eq-hplc-01",
+    type: MaintenanceType.Calibration,
+    content: "流量准确性校准、性能验证、记录检查",
+    planDate: "2026-06-25",
+    dueDate: "2026-06-22",
+    status: MaintenanceTodoStatus.Pending,
+    assigneeId: "u-manager",
+    createdAt: "2026-06-15T10:00:00+08:00"
+  },
+  {
+    id: "td-002",
+    planId: "mp-002",
+    equipmentId: "eq-micro-02",
+    type: MaintenanceType.Cleaning,
+    content: "镜头清洁、光路检查、防尘维护",
+    planDate: "2026-06-20",
+    dueDate: "2026-06-17",
+    status: MaintenanceTodoStatus.Pending,
+    assigneeId: "u-researcher",
+    createdAt: "2026-06-10T14:00:00+08:00"
+  },
+  {
+    id: "td-003",
+    planId: "mp-003",
+    equipmentId: "eq-sterile-03",
+    type: MaintenanceType.Preventive,
+    content: "安全性能检测、压力测试、密封检查",
+    planDate: "2026-07-01",
+    dueDate: "2026-06-16",
+    status: MaintenanceTodoStatus.Overdue,
+    assigneeId: "u-manager",
+    createdAt: "2026-06-01T09:00:00+08:00"
+  }
 ];
 
 export const reservations: Reservation[] = [

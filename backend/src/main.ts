@@ -3,6 +3,7 @@ import { auditLogs } from "./database/seeds/seed.ts";
 import { equipmentRoutes } from "./routes/equipment.routes.ts";
 import { borrowRoutes } from "./routes/borrow.routes.ts";
 import { maintenanceRoutes } from "./routes/maintenance.routes.ts";
+import { maintenancePlanRoutes } from "./routes/maintenancePlan.routes.ts";
 import { reservationRoutes } from "./routes/reservation.routes.ts";
 import { categoryRoutes } from "./routes/category.routes.ts";
 import { dashboardService } from "./services/dashboard.service.ts";
@@ -45,7 +46,8 @@ const server = createServer(async (req, res) => {
       equipmentRoutes(method, path, url.searchParams, user as never, body) ??
       borrowRoutes(method, path, url.searchParams, user as never, body) ??
       reservationRoutes(method, path, url.searchParams, user as never, body) ??
-      maintenanceRoutes(method, path, url.searchParams, user as never, body);
+      maintenanceRoutes(method, path, url.searchParams, user as never, body) ??
+      maintenancePlanRoutes(method, path, url.searchParams, user as never, body);
 
     if (data === undefined) throw new ApiError(404, "NOT_FOUND", "接口不存在");
     res.writeHead(method === "POST" ? 201 : 200, { "content-type": "application/json; charset=utf-8" });

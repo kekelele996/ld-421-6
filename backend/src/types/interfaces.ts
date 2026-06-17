@@ -1,4 +1,4 @@
-import type { AssetStatusValue, BorrowStatusValue, MaintenanceTypeValue, ReturnConditionValue, UserRole } from "./enums.ts";
+import type { AssetStatusValue, BorrowStatusValue, CycleUnitValue, MaintenancePlanStatusValue, MaintenanceTodoStatusValue, MaintenanceTypeValue, ReturnConditionValue, UserRole } from "./enums.ts";
 
 export type User = {
   id: string;
@@ -54,6 +54,37 @@ export type MaintenanceRecord = {
   cost: number;
   maintainerId: string;
   result: "Pass" | "Fail" | "NeedsFollowUp";
+  planId?: string;
+  todoId?: string;
+};
+
+export type MaintenancePlan = {
+  id: string;
+  name: string;
+  categoryId: string;
+  type: MaintenanceTypeValue;
+  cycleValue: number;
+  cycleUnit: CycleUnitValue;
+  remindDaysBefore: number;
+  content: string;
+  status: MaintenancePlanStatusValue;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type MaintenanceTodo = {
+  id: string;
+  planId: string;
+  equipmentId: string;
+  type: MaintenanceTypeValue;
+  content: string;
+  planDate: string;
+  dueDate: string;
+  status: MaintenanceTodoStatusValue;
+  assigneeId?: string;
+  createdAt: string;
+  completedAt?: string;
 };
 
 export type Reservation = {
